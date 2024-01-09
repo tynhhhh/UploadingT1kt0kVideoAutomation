@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="D:\vscode\mobile automation\venv"
+VIRTUAL_ENV="T:\vs\automation\UploadingT1kt0kVideoAutomation\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
