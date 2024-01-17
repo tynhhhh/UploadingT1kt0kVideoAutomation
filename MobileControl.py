@@ -33,7 +33,7 @@ from random import randint
 #         subprocess.call("adb start-server", stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 #         time.sleep(3)
 def getImgFolder():
-    return r"T:\vs\automation\UploadingT1kt0kVideoAutomation\imgFolder"
+    return r"D:\vscode\git\UploadingT1kt0kVideoAutomation\imgFolder"
 def move_file(folder_name):
     imgFolder = getImgFolder()
     imgs = os.listdir(imgFolder)
@@ -104,7 +104,7 @@ def bypass_slide(devices):
     return x2-x1
 class LDplayerConsole:
     def __init__(self):
-        self.base_console = r'T:\LDPlayer\LDPlayer9\dnconsole '
+        self.base_console = r'D:\LDPlayer\LDPlayer9\dnconsole '
     def launchLD(self,index):
         command = self.base_console + f'launch --index {index}'
         subprocess.call(command,stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT,shell=True)
@@ -298,7 +298,7 @@ class starts(threading.Thread):
         self.device = i
         self.auto = Auto(self.nameLD)
         self.LDconsole = LDplayerConsole()
-        listPackage_command = r"T:\LDPlayer\LDPlayer9\ld -s 0 pm list packages"
+        listPackage_command = r"D:\LDPlayer\LDPlayer9\ld -s 0 pm list packages"
         listPackage_output = subprocess.check_output(listPackage_command,shell=True, text=True)
         self.listPackage= [item[item.find(':')+1:] for item in listPackage_output.split('\n') if len(item) != 0]
     def random_music(self):
@@ -324,23 +324,23 @@ class starts(threading.Thread):
                 break
 
     def OpenGallery(self,index):
-        launchTikTok_command = f'T:\LDPlayer\LDPlayer9\dnconsole.exe launchex --index {index} --packagename "com.android.gallery3d"'
+        launchTikTok_command = f'D:\LDPlayer\LDPlayer9\dnconsole.exe launchex --index {index} --packagename "com.android.gallery3d"'
         subprocess.call(launchTikTok_command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
         subprocess.call(launchTikTok_command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
     def OpenTikTok(self,index):
-        launchTikTok_command = f'T:\LDPlayer\LDPlayer9\dnconsole.exe launchex --index {index} --packagename "com.ss.android.ugc.trill"'
+        launchTikTok_command = f'D:\LDPlayer\LDPlayer9\dnconsole.exe launchex --index {index} --packagename "com.ss.android.ugc.trill"'
         subprocess.call(launchTikTok_command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
         subprocess.call(launchTikTok_command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
     def OpenBrowser(self,index):
-        launchTikTok_command = f'T:\LDPlayer\LDPlayer9\dnconsole.exe launchex --index {index} --packagename "com.android.browser"'
+        launchTikTok_command = f'D:\LDPlayer\LDPlayer9\dnconsole.exe launchex --index {index} --packagename "com.android.browser"'
         subprocess.call(launchTikTok_command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
         subprocess.call(launchTikTok_command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
     def OpenSetting(self,index):
-        launchTikTok_command = f'T:\LDPlayer\LDPlayer9\dnconsole.exe launchex --index {index} --packagename "com.android.settings"'
+        launchTikTok_command = f'D:\LDPlayer\LDPlayer9\dnconsole.exe launchex --index {index} --packagename "com.android.settings"'
         subprocess.call(launchTikTok_command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
         subprocess.call(launchTikTok_command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
     def killSettings(self,index):
-        command = f'T:\LDPlayer\LDPlayer9\dnconsole.exe killapp --index {index} --packagename "com.android.settings"'
+        command = f'D:\LDPlayer\LDPlayer9\dnconsole.exe killapp --index {index} --packagename "com.android.settings"'
         subprocess.call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
         subprocess.call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
     def UploadVideoButton(self):
@@ -367,8 +367,6 @@ class starts(threading.Thread):
             print('No device access!')
     def UploadVideo(self):
         auto = self.auto
-        # upload_button = 'imgs/uploadline.png'
-        # auto.tapimg(upload_button)
         x_res,y_res = auto.GetScreenResolution()
         auto.click(x_res*0.813,y_res*0.833)
 
@@ -379,8 +377,8 @@ class starts(threading.Thread):
     def PressNext(self):
         auto = self.auto
 
-        nextButton = "imgs/nextButton.png"
-        auto.tapimg(nextButton)
+        x_rex,y_res = auto.GetScreenResolution()
+        auto.click(x_rex*0.79,y_res*0.95)
     def GoPublic(self):
         auto = self.auto
 
@@ -480,6 +478,7 @@ class starts(threading.Thread):
             cond1,cond2 = auto.find(cond1_img), auto.find(cond2_img)
             if len(cond1) != 0 and len(cond2) != 0:
                 break
+        time.sleep(3)
     def OpeningTikTokGallery(self):
         auto = self.auto
 
@@ -502,9 +501,32 @@ class starts(threading.Thread):
 
         img = "imgs/upButton.png"
         target = auto.find(img)
+        count = 0
         while True:
             target = auto.find(img)
             if len(target) != 0:
+                break
+            if count == 1000: 
+                self.PressNext()
+                break        
+            count += 1
+    def OpeningErrorLoadingTikTok(self):
+        auto = self.auto
+
+        img = "imgs/tryagainsign.png"
+        target = auto.findTF(img)
+        while True:
+            target = auto.find(img)
+            if target:
+                break
+    def OpeningGeneralUploading(self):
+        auto = self.auto
+
+        img = "imgs/redbutton.png"
+        target = auto.findTF(img)
+        while True:
+            target = auto.find(img)
+            if target:
                 break
     def UseSound(self):
         auto = self.auto
@@ -524,11 +546,11 @@ class starts(threading.Thread):
                 break
     def OpenTikTokError(self):
         auto = self.auto
-        error_img = 'imgs/occurederror.png'
-        errorOccured = auto.find(error_img)
-        if len(errorOccured) != 0:
-            tryagainbutton_img = 'imgs/tryagainbutton.png' 
-            auto.tapimg(tryagainbutton_img)
+        x_res,y_res = auto.GetScreenResolution()
+        error_img = 'imgs/tryagainsign.png'
+        errorOccured = auto.findTF(error_img)
+        if errorOccured:
+            auto.click(x_res//2,y_res*0.83)
     def xy_position(self):
         auto = self.auto
         # Calculate each video and save these video
@@ -581,8 +603,10 @@ class starts(threading.Thread):
         auto = self.auto
         
         x_res, y_res = auto.GetScreenResolution()
-        x,y = x_res*0.163, y_res*0.275
-        auto.click(x,y)
+        auto.click(x_res*0.49,y_res*0.15)
+        time.sleep(2)
+
+        auto.click(x_res*0.163,y_res*0.275)
     def ldreboot(self,index):
         self.LDconsole.reboothLD(index)
     def deleteCache(self,index):
@@ -620,45 +644,44 @@ def main(m):
 def start_thread(device, thread_number):
     print(f"Thread {thread_number}: Using device - {device}")
     run = starts(device, thread_number)
-    if False:
-        checkFolder()
-    # Upload tiktok video based on music
-    if True:
-        folder_path = r"C:\Users\Admin-s\OneDrive\Documents\XuanZhi9\Pictures\Screenshots\ldPicture" + str(thread_number)
-        # Create img folder of the device
-        checkFolder(device)
-        # # Move img to the folder
-        move_file(device)
-        run.ldreboot(thread_number)
-        run.isHome()
-        run.OpenGallery(thread_number)
-        run.GoToMusicLink(thread_number)
-        # Loading TikTok
-        run.didTiktokOpen()
-        time.sleep(3)
-        # Click if there's error
-        run.OpenTikTokError()
-        # Wait for tiktok opening
-        run.OpeningTikTok()
-        # Use this sound
-        run.UseSound()
-        # Press "Upload"
-        run.UploadVideo()
-        # Wait for TikTok gallery opening
-        run.OpeningTikTkGoallery()
-        # Select video
-        run.SelectVideo()
-        # Wait for confirmation
-        run.OpeningCompletedSelection()
-        # Press "Next"
-        run.PressNext()
-        # Wait for final step
-        run.OpeningFinalUploadStep()
-        # Uppppppppppp
-        run.GoPublic()
 
-        run.deleteCache(thread_number)
-        run.ldreboot(thread_number)
+    # Create img folder of the device
+    # checkFolder(device)
+    # # Move img to the folder
+    # move_file(device)
+    
+    subprocess.call('adb devices',stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT,shell=True)
+    time.sleep(2)
+    subprocess.call('adb devices',stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT,shell=True)
+    time.sleep(2)
+    run.GoToMusicLink(thread_number)
+    # Loading TikTok
+    run.OpeningErrorLoadingTikTok()
+    # Click if there's error
+    run.OpenTikTokError()
+    # Wait for tiktok opening
+    run.OpeningTikTok()
+    # Use this sound
+    run.UseSound()
+    run.OpeningGeneralUploading()
+    # Press "Upload"
+    run.UploadVideo()
+    # Wait for TikTok gallery opening
+    run.OpeningTikTokGallery()
+    # Select video
+    run.SelectVideo()
+    # Wait for confirmation
+    run.OpeningCompletedSelection()
+    # Press "Next"
+    run.PressNext()
+    # Wait for final step
+    run.OpeningFinalUploadStep()
+    # Uppppppppppp
+    run.GoPublic()
+    time.sleep(3)
+    remove_file(device)
+    run.deleteCache(thread_number)
+    run.ldreboot(thread_number)
 
 if __name__ == "__main__":
     for m in range(1):
