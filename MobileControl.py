@@ -1,12 +1,13 @@
 import os,time
 try:
- import threading,subprocess,base64,cv2,random,requests,string
+ import threading,subprocess,base64,cv2,random
  import numpy as np
 except:
   os.system("pip install opencv-python")
   os.system("pip install numpy")
   os.system("pip install requests")
-import threading,subprocess,base64,cv2,random,hashlib,sys,requests,shutil
+  os.system("pip install pandas")
+import threading,subprocess,base64,cv2,random,requests,shutil
 import numpy as np
 from datetime import datetime
 from  xml.dom.minidom import parse
@@ -41,11 +42,13 @@ def move_file(folder_name):
     choosenImg = random.choice(imgs)
     imgPath = os.path.join(imgFolder,choosenImg)
     destination_path = os.path.join(imgFolder,folder_name)
-    try:
-        shutil.move(imgPath, destination_path)
-        print(f"File '{choosenImg}' moved successfully from '{imgFolder}' to '{destination_path}'")
-    except PermissionError:
-        print(f"Error: Permission issue while moving file '{choosenImg}'")
+    while True:
+        try:
+            shutil.move(imgPath, destination_path)
+            print(f"File '{choosenImg}' moved successfully from '{imgFolder}' to '{destination_path}'")
+            break
+        except:
+            continue
 def remove_file(folder_name):
     imgFolder = getImgFolder()
     trash_bin = os.path.join(imgFolder,'uploadeditems')
@@ -55,12 +58,13 @@ def remove_file(folder_name):
     for i in range(len(imgs)):
         choosenImg = imgs[i]
         imgPath = os.path.join(folder_path,choosenImg)
-
-        try:
-            shutil.move(imgPath, trash_bin)
-            print(f"File '{choosenImg}' removed successfully from '{imgPath}' to '{trash_bin}'")
-        except PermissionError:
-            print(f"Error: Permission issue while moving file '{choosenImg}'")
+        while True:
+            try:
+                shutil.move(imgPath, trash_bin)
+                print(f"File '{choosenImg}' removed successfully from '{imgPath}' to '{trash_bin}'")
+                break
+            except:
+                continue
 def checkFolder(folder_name):
     base_path = getImgFolder()
     folder_path = os.path.join(base_path,folder_name)
@@ -176,7 +180,7 @@ class Auto:
     def Back(self):
         subprocess.call(f"adb -s {self.handle} shell input keyevent 3", stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
     def DeleteCache(self, package):
-        subprocess.check_output(f"adb -s {self.handle} shell pm clear {package}", stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+        subprocess.check_output(f"adb -s {self.handle} shell pm clear {package}", stderr=subprocess.STDOUT)
     def off(self, package):
         subprocess.call(f"adb -s {self.handle} shell am force-stop {package}", stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
     def InpuText(self, text=None, VN=None):
@@ -323,22 +327,22 @@ class starts(threading.Thread):
             if systemapp:
                 break
 
-    def OpenGallery(self,index):
-        launchTikTok_command = f'D:\LDPlayer\LDPlayer9\dnconsole.exe launchex --index {index} --packagename "com.android.gallery3d"'
-        subprocess.call(launchTikTok_command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
-        subprocess.call(launchTikTok_command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
-    def OpenTikTok(self,index):
-        launchTikTok_command = f'D:\LDPlayer\LDPlayer9\dnconsole.exe launchex --index {index} --packagename "com.ss.android.ugc.trill"'
-        subprocess.call(launchTikTok_command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
-        subprocess.call(launchTikTok_command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
-    def OpenBrowser(self,index):
-        launchTikTok_command = f'D:\LDPlayer\LDPlayer9\dnconsole.exe launchex --index {index} --packagename "com.android.browser"'
-        subprocess.call(launchTikTok_command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
-        subprocess.call(launchTikTok_command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
-    def OpenSetting(self,index):
-        launchTikTok_command = f'D:\LDPlayer\LDPlayer9\dnconsole.exe launchex --index {index} --packagename "com.android.settings"'
-        subprocess.call(launchTikTok_command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
-        subprocess.call(launchTikTok_command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
+    def OpenGallery(self,device):
+        command = f'adb -s {device} shell am start -n com.android.gallery3d/com.android.gallery3d.app.GalleryActivity'
+        subprocess.call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
+        subprocess.call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
+    def OpenTikTok(self,device):
+        command = f'adb -s {device} shell am start -n com.ss.android.ugc.trill/com.ss.android.ugc.aweme.splash.SplashActivity'
+        subprocess.call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
+        subprocess.call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
+    def OpenBrowser(self,device):
+        command = f'adb -s {device} shell am start -n com.android.browser/com.android.browser.BrowserActivity'
+        subprocess.call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
+        subprocess.call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
+    def OpenSetting(self,device):
+        command = f'adb -s {device} shell am start -n com.android.settings/com.android.settings.Settings'
+        subprocess.call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
+        subprocess.call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
     def killSettings(self,index):
         command = f'D:\LDPlayer\LDPlayer9\dnconsole.exe killapp --index {index} --packagename "com.android.settings"'
         subprocess.call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
@@ -349,26 +353,73 @@ class starts(threading.Thread):
         auto.tapimg(button)
     def AcceptAccessingCamera(self):
         auto = self.auto
+        x_res,y_res = auto.GetScreenResolution()
         camera_img = 'imgs/cameraimg.png'
-        camera = auto.find(camera_img)
-        if len(camera) != 0:
-            accept_img = 'imgs/acceptcamera.png'
-            auto.tapimg(accept_img)
-        else:
-            print('No camera access!')
+        camera_access = auto.findTF(camera_img)
+
+        print('Finding if TikTok requires camera access...')
+        finding_times = 1
+        while True:
+            if camera_access:
+                while True:
+                    print('TikTok requires camera access...')
+                    auto.click(x_res*0.732,y_res*0.594)
+                    if not camera_access:
+                        print('Accept camera access!')
+                        time.sleep(2)
+                        break
+                    time.sleep(3)
+                break
+            else:
+                if finding_times == 4:
+                    print('TikTok requires no camera access!')
+                    break
+                print('Finding times: ' + str(finding_times))
+                finding_times += 1
+                time.sleep(3)
+
+
+            
     def AcceptAccessingDevice(self):
         auto = self.auto
+        x_res,y_res = auto.GetScreenResolution()
         device_img = 'imgs/accessdevice.png'
-        device = auto.find(device_img)
-        if len(device) != 0:
-            accept_img = 'imgs/acceptaccessdevice.png'
-            auto.tapimg(accept_img)
-        else:
-            print('No device access!')
+        device_access = auto.findTF(device_img)
+        print('Finding if TikTok requires camera access...')
+        finding_times = 1
+        while True:
+            if device_access:
+                while True:
+                    print('TikTok requires device access...')
+                    auto.click(x_res*0.732,y_res*0.594)
+                    if not device_access:
+                        print('Accept device access!')
+                        time.sleep(2)
+                        break
+                    time.sleep(3)
+                break
+            else:
+                if finding_times == 4:
+                    print('TikTok requires no device access!')
+                    break
+                print('Finding times: ' + str(finding_times))
+                finding_times += 1
+                time.sleep(3)
+
+
     def UploadVideo(self):
         auto = self.auto
         x_res,y_res = auto.GetScreenResolution()
-        auto.click(x_res*0.813,y_res*0.833)
+        
+        while True:
+            auto.click(x_res*0.813,y_res*0.833)
+            img = 'imgs/allbar.png'
+            if auto.findTF(img):
+                break
+            time.sleep(5)
+
+
+
 
     def SelectVideoSite(self):
         auto = self.auto
@@ -376,14 +427,32 @@ class starts(threading.Thread):
         auto.tapimg(video_button_img)
     def PressNext(self):
         auto = self.auto
+        diaryButton = 'imgs/yourdiary.png'
+        nextButton = 'imgs/next.png'
+
 
         x_rex,y_res = auto.GetScreenResolution()
-        auto.click(x_rex*0.79,y_res*0.95)
+        while True:
+            cond1 = auto.findTF(diaryButton)
+            cond2 = auto.findTF(nextButton)
+            if all([cond1,cond2]):
+                auto.click(x_rex*0.79,y_res*0.95)
+                time.sleep(5)
+            else:
+                break
     def GoPublic(self):
         auto = self.auto
-
+        x_res,y_res = auto.GetScreenResolution()
         upButton = 'imgs/upButton.png'
         auto.tapimg(upButton)
+        print(f'{auto.handle}: The video has been public!')
+
+
+        while True:
+            ok = 'imgs/ok.png'
+            if auto.findTF(ok):
+                auto.click(x_res//2,y_res*0.95)
+                break
     # Get click position of the video
     def GetInfo(self):
         auto = self.auto
@@ -421,19 +490,31 @@ class starts(threading.Thread):
         x_res, y_res = auto.GetScreenResolution()
 
         # Open System Apps folder
+        print(f'{auto.handle}: Opening browser...')
         self.OpenBrowser(index)
         time.sleep(2)
         # Click at the searching bar
         auto.click(x_res//2,y_res*0.076)
         # Select music
+        print(f'{auto.handle}: Choosing random music...')
         music = self.TiktokMusics(self.random_music())
-        # Access the music link
-        auto.InpuText(music)
+        try:
+            # Access the music link
+            auto.InpuText(music)
+        except:
+            music = self.TiktokMusics(self.random_music())
+            auto.InpuText(music)
         auto.Enter()
-        time.sleep(5)
+        time.sleep(10)
         # Open tiktok   
-
+        print(f'{auto.handle}: Opening TikTok...')
         while True:
+            muavuinoibuon = 'imgs/muavuinoibuon.png'
+            if auto.findTF(muavuinoibuon):
+                time.sleep(3)
+                auto.click(x_res//2, y_res*0.75)
+                print('Special case!')
+                break
             case1 = 'imgs/seemoremusics.png'
             case1_found = auto.findTF(case1)
             if case1_found: 
@@ -456,7 +537,8 @@ class starts(threading.Thread):
             case4 = 'imgs/theresnovideousethissound.png'
             case4_found = auto.findTF(case4)
             if case4_found:
-                auto.swipe(x_res//2,y_res*0.8,x_res//2,y_res*0.6)
+                auto.swipe(x_res//2,y_res*0.8,x_res//2,y_res*0.4)
+                time.sleep(2)
                 auto.click(x_res//2,y_res*0.934)
                 print("Case 4 found!")
                 break
@@ -473,7 +555,7 @@ class starts(threading.Thread):
 
         cond1_img = 'imgs/addtohistory.png'
         cond2_img = 'imgs/usethissoundbutton.png'
-        
+        print(f'{auto.handle}: Opening TikTok...')
         while True:
             cond1,cond2 = auto.find(cond1_img), auto.find(cond2_img)
             if len(cond1) != 0 and len(cond2) != 0:
@@ -483,6 +565,7 @@ class starts(threading.Thread):
         auto = self.auto
 
         img = 'imgs/allbar.png'
+        print(f'{auto.handle}: Opening TikTok gallery...')
         while True:
             target = auto.find(img)
             if len(target) != 0:
@@ -490,26 +573,24 @@ class starts(threading.Thread):
     def OpeningCompletedSelection(self):
         auto = self.auto
 
-        img = "imgs/nextButton.png"
-        target = auto.find(img)
+        diaryButton = "imgs/yourdiary.png"
+        nextButton = "imgs/next.png"
+        print(f'{auto.handle}: Confirming video uploading...')
         while True:
-            target = auto.find(img)
-            if len(target) != 0:
+            cond1 = auto.findTF(diaryButton)
+            cond2 = auto.findTF(nextButton)
+            if any([cond1,cond2]):
                 break
     def OpeningFinalUploadStep(self):
         auto = self.auto
 
         img = "imgs/upButton.png"
-        target = auto.find(img)
-        count = 0
+        target = auto.findTF(img)
+        print(f'{auto.handle}: Opening final step...')
         while True:
-            target = auto.find(img)
-            if len(target) != 0:
+            if target:
                 break
-            if count == 1000: 
-                self.PressNext()
-                break        
-            count += 1
+        
     def OpeningErrorLoadingTikTok(self):
         auto = self.auto
 
@@ -532,6 +613,7 @@ class starts(threading.Thread):
         auto = self.auto
         # Click "Use this sound" button
         usethissound_button = 'imgs/usethissoundbutton.png'
+        print(f'{auto.handle}: Use this sound!')
         auto.tapimg(usethissound_button)
     # Check if TikTok opens
     def didTiktokOpen(self):
@@ -542,7 +624,7 @@ class starts(threading.Thread):
             hasOpen = len(tiktokLoading)
 
             if hasOpen == 0:
-                print('TikTok has opened!')
+                print(f'{auto.handle}: TikTok has opened!')
                 break
     def OpenTikTokError(self):
         auto = self.auto
@@ -550,7 +632,9 @@ class starts(threading.Thread):
         error_img = 'imgs/tryagainsign.png'
         errorOccured = auto.findTF(error_img)
         if errorOccured:
+            print(f"{auto.handle}: Opening TikTok error found!")
             auto.click(x_res//2,y_res*0.83)
+            print(f'{auto.handle}: Error solved!')
     def xy_position(self):
         auto = self.auto
         # Calculate each video and save these video
@@ -572,41 +656,20 @@ class starts(threading.Thread):
         x2 = [x_mean+x_bias, x_mean*2-x_bias]
         x3 = [x_mean*2+x_bias, x_res-x_bias]
         return x1, x2, x3, y1, y2, y3
-    def imgThumbNail(self, nth_video= 0):
-        auto = self.auto
-        # Get the screen
-        srceen = auto.screen_capture()
-        
-        x1, x2, x3, y1, y2, y3 = self.xy_position()
-        # Select video posion
-        match nth_video:
-            case 0:
-                the_video = srceen[y1[0]:y1[1], x1[0]:x1[1]]
-            case 1:
-                the_video = srceen[y1[0]:y1[1], x2[0]:x2[1]]
-            case 2:
-                the_video = srceen[y1[0]:y1[1], x3[0]:x3[1]]
-            case 3:
-                the_video = srceen[y2[0]:y2[1], x1[0]:x1[1]]
-            case 4:
-                the_video = srceen[y2[0]:y2[1], x2[0]:x2[1]]
-            case 5:
-                the_video = srceen[y2[0]:y2[1], x3[0]:x3[1]]
-            case 6:
-                the_video = srceen[y3[0]:y3[1], x1[0]:x1[1]]
-            case 7:
-                the_video = srceen[y3[0]:y3[1], x2[0]:x2[1]]
-            case 8:
-                the_video = srceen[y3[0]:y3[1], x3[0]:x3[1]]
-        return the_video
-    def SelectVideo(self):
+
+    def SelectVideo(self,device):
         auto = self.auto
         
         x_res, y_res = auto.GetScreenResolution()
+        print(f'{auto.handle}: Selecting video...')
+
         auto.click(x_res*0.49,y_res*0.15)
         time.sleep(2)
 
+        print(f'{auto.handle}: Selecting video...')
+
         auto.click(x_res*0.163,y_res*0.275)
+
     def ldreboot(self,index):
         self.LDconsole.reboothLD(index)
     def deleteCache(self,index):
@@ -622,8 +685,21 @@ class starts(threading.Thread):
 
         time.sleep(3)
         appandnoti2 = 'imgs/appandnoti2.png'
+        galleryImg = "imgs/galleryimg.png"
         if auto.findTF(appandnoti2):
-            appandnoti2_x,appandnoti2_y = auto.find('imgs/galleryimg.png')[0]
+            if not auto.findTF(galleryImg):
+                seemoreapp_img = 'imgs/seemoreapp.png'
+                seemoreapp = auto.find(seemoreapp_img)[0]
+                auto.click(x_res//2, seemoreapp[1]+y_res*0.06)
+            while True:
+                gallery = auto.findTF(galleryImg)
+                if gallery:
+                    break
+                auto.swipe(x_res//2,y_res*0.8,x_res//2,y_res*0.4)
+            
+            time.sleep(3)
+            appandnoti2_x,appandnoti2_y = auto.find(galleryImg)[0]
+            print(appandnoti2_x)
             auto.click(x_res//2,appandnoti2_y+y_res*0.027)
         time.sleep(3)
         auto.click(x_res//2,y_res*0.7)
@@ -633,6 +709,10 @@ class starts(threading.Thread):
         time.sleep(3)
 
         auto.click(x_res*0.81,y_res*0.619)
+    def GalleryCache(self):
+        auto = self.auto
+
+        auto.DeleteCache('com.android.gallery3d')
 def main(m):
     threads = []
     devices = GetDevices()
@@ -646,15 +726,17 @@ def start_thread(device, thread_number):
     run = starts(device, thread_number)
 
     # Create img folder of the device
-    # checkFolder(device)
-    # # Move img to the folder
-    # move_file(device)
+    checkFolder(device)
+    # Move img to the folder
+    move_file(device)
     
     subprocess.call('adb devices',stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT,shell=True)
     time.sleep(2)
     subprocess.call('adb devices',stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT,shell=True)
     time.sleep(2)
-    run.GoToMusicLink(thread_number)
+    run.OpenGallery(device)
+    time.sleep(3)
+    run.GoToMusicLink(device)
     # Loading TikTok
     run.OpeningErrorLoadingTikTok()
     # Click if there's error
@@ -664,12 +746,18 @@ def start_thread(device, thread_number):
     # Use this sound
     run.UseSound()
     run.OpeningGeneralUploading()
+    # Optional (Warning: Under development!)
+    if False:
+        # Optional: Check if TikTok requires camera access
+        run.AcceptAccessingCamera()
+        # Optional: Check if TikTok requires device access
+        run.AcceptAccessingDevice()
     # Press "Upload"
     run.UploadVideo()
     # Wait for TikTok gallery opening
     run.OpeningTikTokGallery()
     # Select video
-    run.SelectVideo()
+    run.SelectVideo(device)
     # Wait for confirmation
     run.OpeningCompletedSelection()
     # Press "Next"
@@ -680,8 +768,8 @@ def start_thread(device, thread_number):
     run.GoPublic()
     time.sleep(3)
     remove_file(device)
-    run.deleteCache(thread_number)
-    run.ldreboot(thread_number)
+
+
 
 if __name__ == "__main__":
     for m in range(1):
