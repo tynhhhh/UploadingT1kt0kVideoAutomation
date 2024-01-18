@@ -33,8 +33,15 @@ from random import randint
 #         time.sleep(2)
 #         subprocess.call("adb start-server", stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 #         time.sleep(3)
-def getImgFolder():
-    return r"D:\vscode\git\UploadingT1kt0kVideoAutomation\imgFolder"
+def LDpath():
+    text = input(r'Folder Ldplayer path(Ex: "D:\LDPlayer\LDPlayer9"): ')
+    return text
+def ImgFolderPath():
+    text = input(r'Folder ImgFolder path(Ex: "D:\vscode\git\UploadingT1kt0kVideoAutomation\imgFolder"): ')
+    return text
+path = ImgFolderPath()
+def getImgFolder(path):
+    return path
 def move_file(folder_name):
     imgFolder = getImgFolder()
     imgs = os.listdir(imgFolder)
@@ -106,33 +113,7 @@ def bypass_slide(devices):
     # plt.imshow(img)
     # plt.show()
     return x2-x1
-class LDplayerConsole:
-    def __init__(self):
-        self.base_console = r'D:\LDPlayer\LDPlayer9\dnconsole '
-    def launchLD(self,index):
-        command = self.base_console + f'launch --index {index}'
-        subprocess.call(command,stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT,shell=True)
-    def quitLD(self,index):
-        command = self.base_console + f'quit --index {index}'
-        subprocess.call(command,stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT,shell=True)
-    def quitallLD(self):
-        command = self.base_console + f'quitall'
-        subprocess.call(command,stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT,shell=True)
-    def settingLD(self,index):
-        command = self.base_console + f'modify --index {index} --resolution 540,960,240 --cpu 2 --memory 2048'
-        subprocess.call(command,stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT,shell=True)
-    def settingLD2(self,name):
-        command = self.base_console + f'modify --name {name} --resolution 540,960,240 --cpu 2 --memory 2048'
-        subprocess.call(command,stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT,shell=True)
-    def addLD(self, name):
-        command = self.base_console + f'add --name {name}'
-        subprocess.call(command,stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT,shell=True)
-    def reboothLD(self,index):
-        command = self.base_console + f'reboot --index {index}'
-        subprocess.call(command,stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT,shell=True)
-    def killappLD(self,index,packagename):
-        command = self.base_console + f'killapp --index {index} --packagename {packagename}'
-        subprocess.call(command,stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT,shell=True)
+
 class Auto:
     def __init__(self,handle):
         self.handle = handle
@@ -293,7 +274,7 @@ def GetDevices():
         else:
             return 
 
-
+ldpath = LDpath()
 
 class starts(threading.Thread):
     def __init__(self, nameLD, i):
@@ -301,8 +282,7 @@ class starts(threading.Thread):
         self.nameLD = nameLD
         self.device = i
         self.auto = Auto(self.nameLD)
-        self.LDconsole = LDplayerConsole()
-        listPackage_command = r"D:\LDPlayer\LDPlayer9\ld -s 0 pm list packages"
+        listPackage_command =ldpath + r"\ld -s 0 pm list packages"
         listPackage_output = subprocess.check_output(listPackage_command,shell=True, text=True)
         self.listPackage= [item[item.find(':')+1:] for item in listPackage_output.split('\n') if len(item) != 0]
     def random_music(self):
@@ -341,10 +321,6 @@ class starts(threading.Thread):
         subprocess.call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
     def OpenSetting(self,device):
         command = f'adb -s {device} shell am start -n com.android.settings/com.android.settings.Settings'
-        subprocess.call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
-        subprocess.call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
-    def killSettings(self,index):
-        command = f'D:\LDPlayer\LDPlayer9\dnconsole.exe killapp --index {index} --packagename "com.android.settings"'
         subprocess.call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
         subprocess.call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
     def UploadVideoButton(self):
@@ -635,28 +611,7 @@ class starts(threading.Thread):
             print(f"{auto.handle}: Opening TikTok error found!")
             auto.click(x_res//2,y_res*0.83)
             print(f'{auto.handle}: Error solved!')
-    def xy_position(self):
-        auto = self.auto
-        # Calculate each video and save these video
-        x_res, y_res = auto.GetScreenResolution()
-        x1, x2, x3, y1, y2, y3, header, body, footer = self.GetInfo()
-        # Seperate y of body into 3 part in accordance with 3 videos
-        y_total = header+body - header+10
-        y_mean = y_total // 3
-        # y position [start,end]
-        y_bias = 10
-        y1 = [header+y_bias,header+y_mean-y_bias]
-        y2 = [header+y_mean+y_bias, header+y_mean*2-y_bias]
-        y3 = [header+y_mean*2+y_bias,header+body-y_bias]
-        # Seperate x of body into 3 part in accordance with 3 videos
-        x_mean = x_res // 3
-        # x position [start,end]
-        x_bias = 5
-        x1 = [x_bias, x_mean-x_bias]
-        x2 = [x_mean+x_bias, x_mean*2-x_bias]
-        x3 = [x_mean*2+x_bias, x_res-x_bias]
-        return x1, x2, x3, y1, y2, y3
-
+    
     def SelectVideo(self,device):
         auto = self.auto
         
@@ -772,5 +727,6 @@ def start_thread(device, thread_number):
 
 
 if __name__ == "__main__":
+    ImgFolderPath()
     for m in range(1):
         threading.Thread(target=main, args=(m,)).start()
