@@ -1,30 +1,79 @@
-from PIL import Image
+import tkinter as tk
+from tkinter import filedialog
+import os
+from moviepy.editor import VideoFileClip
+from tqdm import tqdm
 
-def process_image(input_path, output_path):
-    # Open the image
-    image = Image.open(input_path)
+def process_video(video_path, dur_input):
+    clip = VideoFileClip(video_path)
 
-    # Get the width and height of the image
-    width, height = image.size
+    base_name = os.path.basename(video_path)
+    file_name, _ = os.path.splitext(base_name)
 
-    # Loop through each pixel in the image
-    for x in range(width):
-        for y in range(height):
-            # Get the pixel value
-            pixel = image.getpixel((x, y))
+    clip_duration = clip.duration
+    num_subclips = int(clip_duration / dur_input)
 
-            # Check if the pixel is not rgb(127,127,127)
-            if pixel[:3] not in [(127, 127, 127),(72,71,68),(88,89,91),(100,101,103),(53,57,61),(55,58,61)]:
-                # Set the pixel to white
-                image.putpixel((x, y), (255, 255, 255) + pixel[3:])  # Preserve additional channels if any
+    # Create a ParentFolder if it doesn't exist for this video
+    folder_name = file_name
 
-    # Convert the image to RGB before saving
-    image = image.convert("RGB")
+    current_path = os.getcwd()
+    saved_folder = os.path.join(current_path, folder_name)
 
-    # Save the modified image
-    image.save(output_path)
+    if not os.path.isdir(saved_folder):
+        os.makedirs(saved_folder)
 
-# Example usage
-input_image_path = "imgs/100.png"
-output_image_path = "output_image.jpg"
-process_image(input_image_path, output_image_path)
+    for i in tqdm(range(num_subclips), desc="Processing Subclips"):
+        start = i * dur_input
+        end = min((i + 1) * dur_input, clip_duration)
+        output_name = f"cutted_{file_name}_part{i}.mp4"
+        sub_clip = clip.subclip(start, end)
+
+        if i == num_subclips - 1:
+            remaining_duration = clip_duration - end
+            if remaining_duration > 0:
+                sub_clip = sub_clip.set_duration(sub_clip.duration + remaining_duration)
+
+        output_path = os.path.join(saved_folder, output_name)
+        sub_clip.write_videofile(output_path, codec='libx264', verbose=False)
+
+    clip.close()
+
+def browse_video_path():
+    video_path = filedialog.askopenfilename(title="Select Video File", filetypes=[("Video Files", "*.mp4;*.avi")])
+    if video_path:
+        entry_path.delete(0, tk.END)
+        entry_path.insert(0, video_path)
+
+def process_button_clicked():
+    video_path = entry_path.get()
+    duration = int(duration_input.get())
+    if video_path:
+        process_video(video_path, duration)
+    else:
+        print("Please select a video file.")
+
+# Create the main application window
+app = tk.Tk()
+app.title("Video Processing Application")
+
+# Create and place GUI components
+label_path = tk.Label(app, text="Video Path:")
+label_path.pack(pady=10)
+
+entry_path = tk.Entry(app, width=40)
+entry_path.pack(pady=10)
+
+browse_button = tk.Button(app, text="Browse", command=browse_video_path)
+browse_button.pack(pady=10)
+
+label_duration = tk.Label(app, text="Duration of each video:")
+label_duration.pack(pady=10)
+
+duration_input = tk.Entry(app, width=40)
+duration_input.pack(pady=10)
+
+process_button = tk.Button(app, text="Process Video", command=process_button_clicked)
+process_button.pack(pady=20)
+
+# Start the GUI application
+app.mainloop()
