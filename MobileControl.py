@@ -37,8 +37,9 @@ def LDpath():
     text = input(r'Folder Ldplayer path(Ex: "D:\LDPlayer\LDPlayer9"): ')
     return text
 def ImgFolderPath():
-    text = input(r'Folder ImgFolder path(Ex: "D:\vscode\git\UploadingT1kt0kVideoAutomation\imgFolder"): ')
-    return text
+    base_path = os.getcwd()
+    imgFolder = os.path.join(base_path,'imgFolder')
+    return imgFolder
 path = ImgFolderPath()
 def getImgFolder(path):
     return path

@@ -1,6 +1,5 @@
 import os,subprocess
 # ""D:\vscode\git\UploadingT1kt0kVideoAutomation\imgFolder""
-
 def checkFolder(folder_name,base_path):
     folder_path = os.path.join(base_path,folder_name)
     if not os.path.exists(folder_path):
@@ -19,7 +18,7 @@ def GetDevices():
 
 
 if __name__ == "__main__":
-    base_path = input(r'Folder ImgFolder path(Ex: "D:\vscode\git\UploadingT1kt0kVideoAutomation\imgFolder"): ')
+    base_path = os.path.join(os.getcwd(),'imgFolder')
     for device in GetDevices():
         checkFolder(device,base_path)
     print('Done!')
