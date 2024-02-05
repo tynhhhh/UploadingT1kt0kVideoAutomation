@@ -354,9 +354,6 @@ class starts(threading.Thread):
                 print('Finding times: ' + str(finding_times))
                 finding_times += 1
                 time.sleep(3)
-
-
-            
     def AcceptAccessingDevice(self):
         auto = self.auto
         x_res,y_res = auto.GetScreenResolution()
