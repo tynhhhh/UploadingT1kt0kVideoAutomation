@@ -1,5 +1,3 @@
-import tkinter as tk
-from tkinter import filedialog
 import os
 from moviepy.editor import VideoFileClip
 from tqdm import tqdm
@@ -18,8 +16,6 @@ def process_video(video_path, dur_input):
     clip_duration = clip.duration
     num_subclips = int(clip_duration / dur_input)
 
-    # Create a ParentFolder if it doesn't exist for this video
-    folder_name = file_name
 
     current_path = os.getcwd()
     saved_folder = os.path.join(current_path, 'imgFolder')
@@ -49,6 +45,6 @@ if __name__ == "__main__":
     print("Start processing videos...")
     for video in accessPL():
         print(f'Processing video {video}')
-        video_path = os.path.join(imgFolder,video)
+        video_path = os.path.join(base_path,'processingLab',video)
         process_video(video_path,15)
         print(f'{video} is done!')
