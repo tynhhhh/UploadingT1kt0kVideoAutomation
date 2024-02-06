@@ -41,7 +41,7 @@ def ImgFolderPath():
     imgFolder = os.path.join(base_path,'imgFolder')
     return imgFolder
 path = ImgFolderPath()
-def getImgFolder(path):
+def getImgFolder(path= path):
     return path
 def move_file(folder_name):
     imgFolder = getImgFolder()
