@@ -531,8 +531,8 @@ class starts(threading.Thread):
         cond2_img = 'imgs/usethissoundbutton.png'
         print(f'{auto.handle}: Opening TikTok...')
         while True:
-            cond1,cond2 = auto.find(cond1_img), auto.find(cond2_img)
-            if len(cond1) != 0 and len(cond2) != 0:
+            cond1,cond2 = auto.findTF(cond1_img), auto.findTF(cond2_img)
+            if cond1 or cond2:
                 break
         time.sleep(3)
     def OpeningTikTokGallery(self):
