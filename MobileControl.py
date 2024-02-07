@@ -403,7 +403,7 @@ class starts(threading.Thread):
         auto = self.auto
         diaryButton = 'imgs/yourdiary.png'
         nextButton = 'imgs/next.png'
-
+        upButton = "imgs/upButton.png"
 
         x_rex,y_res = auto.GetScreenResolution()
         while True:
@@ -411,12 +411,10 @@ class starts(threading.Thread):
             cond2 = auto.findTF(nextButton)
             if any([cond1,cond2]):
                 auto.click(x_rex*0.79,y_res*0.95)
-                time.sleep(6)
-                
-                if not any([cond1,cond2]):
-                    break
-            
-            
+                time.sleep(3)
+            if auto.findTF(upButton):
+                break
+                  
     def GoPublic(self):
         auto = self.auto
         x_res,y_res = auto.GetScreenResolution()
@@ -563,6 +561,7 @@ class starts(threading.Thread):
             cond2 = auto.findTF(nextButton)
             if any([cond1,cond2]):
                 break
+
     def OpeningFinalUploadStep(self):
         auto = self.auto
 
