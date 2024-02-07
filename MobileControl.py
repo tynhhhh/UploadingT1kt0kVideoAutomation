@@ -534,7 +534,7 @@ class starts(threading.Thread):
         print(f'{auto.handle}: Opening TikTok...')
         while True:
             cond1,cond2 = auto.findTF(cond1_img), auto.findTF(cond2_img)
-            if all(cond1,cond2):
+            if cond1 and cond2:
                 return x_res*0.78, y_res*0.927
             elif cond2:
                 return x_res//2, y_res*0.927
