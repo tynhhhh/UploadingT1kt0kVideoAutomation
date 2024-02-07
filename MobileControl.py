@@ -531,12 +531,13 @@ class starts(threading.Thread):
 
         cond1_img = 'imgs/addtohistory.png'
         cond2_img = 'imgs/usethissoundbutton.png'
+        cond3_img = 'imgs/opentiktokbuttoncamera.png'
         print(f'{auto.handle}: Opening TikTok...')
         while True:
-            cond1,cond2 = auto.findTF(cond1_img), auto.findTF(cond2_img)
+            cond1,cond2,cond3 = auto.findTF(cond1_img), auto.findTF(cond2_img), auto.findTF(cond3_img)
             if cond1 and cond2:
                 return x_res*0.78, y_res*0.927
-            elif cond2:
+            elif cond2 or cond3:
                 return x_res//2, y_res*0.927
                 
     def OpeningTikTokGallery(self):
