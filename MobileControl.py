@@ -409,11 +409,14 @@ class starts(threading.Thread):
         while True:
             cond1 = auto.findTF(diaryButton)
             cond2 = auto.findTF(nextButton)
-            if all([cond1,cond2]):
+            if any([cond1,cond2]):
                 auto.click(x_rex*0.79,y_res*0.95)
-                time.sleep(5)
-            else:
-                break
+                time.sleep(6)
+                
+                if not any([cond1,cond2]):
+                    break
+            
+            
     def GoPublic(self):
         auto = self.auto
         x_res,y_res = auto.GetScreenResolution()
