@@ -527,14 +527,18 @@ class starts(threading.Thread):
     def OpeningTikTok(self):
         auto = self.auto
 
+        x_res,y_res = auto.GetScreenResolution()
+
         cond1_img = 'imgs/addtohistory.png'
         cond2_img = 'imgs/usethissoundbutton.png'
         print(f'{auto.handle}: Opening TikTok...')
         while True:
             cond1,cond2 = auto.findTF(cond1_img), auto.findTF(cond2_img)
-            if cond1 or cond2:
-                break
-        time.sleep(3)
+            if all(cond1,cond2):
+                return x_res*0.78, y_res*0.927
+            elif cond2:
+                return x_res//2, y_res*0.927
+                
     def OpeningTikTokGallery(self):
         auto = self.auto
 
@@ -583,12 +587,12 @@ class starts(threading.Thread):
             target = auto.find(img)
             if target:
                 break
-    def UseSound(self):
+    def UseSound(self,x,y):
         auto = self.auto
         # Click "Use this sound" button
         usethissound_button = 'imgs/usethissoundbutton.png'
         print(f'{auto.handle}: Use this sound!')
-        auto.tapimg(usethissound_button)
+        auto.click(x,y)
     # Check if TikTok opens
     def didTiktokOpen(self):
         auto = self.auto
@@ -695,9 +699,9 @@ def start_thread(device, thread_number):
     # Click if there's error
     run.OpenTikTokError()
     # Wait for tiktok opening
-    run.OpeningTikTok()
+    x,y = run.OpeningTikTok()
     # Use this sound
-    run.UseSound()
+    run.UseSound(x,y)
     run.OpeningGeneralUploading()
     # Optional (Warning: Under development!)
     if False:
