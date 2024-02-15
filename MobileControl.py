@@ -283,9 +283,6 @@ class starts(threading.Thread):
         self.nameLD = nameLD
         self.device = i
         self.auto = Auto(self.nameLD)
-        listPackage_command =ldpath + r"\ld -s 0 pm list packages"
-        listPackage_output = subprocess.check_output(listPackage_command,shell=True, text=True)
-        self.listPackage= [item[item.find(':')+1:] for item in listPackage_output.split('\n') if len(item) != 0]
     def random_music(self):
         return random.randint(0,38)
     def random_amount_of_the_uploaded_video(self):
