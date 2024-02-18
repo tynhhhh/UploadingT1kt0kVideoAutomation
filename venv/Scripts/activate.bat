@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=D:\vscode\git\UploadingT1kt0kVideoAutomation\venv
+set VIRTUAL_ENV=T:\vs\git\UploadingT1kt0kVideoAutomation\venv
 
 if not defined PROMPT set PROMPT=$P$G
 
