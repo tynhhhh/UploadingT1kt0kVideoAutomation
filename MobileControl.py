@@ -278,7 +278,7 @@ class starts(threading.Thread):
         self.nameLD = nameLD
         self.device = i
         self.auto = Auto(self.nameLD)
-        self.openedApps = []
+        self.openedApps = ["com.ss.android.ugc.trill"]
     def random_music(self):
         return random.randint(0,38)
     def random_amount_of_the_uploaded_video(self):
