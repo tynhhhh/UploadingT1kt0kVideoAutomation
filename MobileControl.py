@@ -292,15 +292,6 @@ class starts(threading.Thread):
         enumerated_links = list(enumerate(links))
         # Return the link has index equal to num 
         return next((value for index, value in enumerated_links if index == num), None)
-    def isHome(self):
-        auto = self.auto
-
-        systemapp_img = 'imgs/systemapp.png'
-        while True:
-            systemapp =auto.findTF(systemapp_img)
-            if systemapp:
-                break
-
     def OpenGallery(self,device):
         target = "com.android.gallery3d"
         self.openedApps.append(target)
@@ -345,14 +336,6 @@ class starts(threading.Thread):
             subprocess.call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
             print(f'{auto.handle}: {target} closed!')
             time.sleep(1)
-    def UploadVideoButton(self):
-        auto = self.auto
-        button = 'imgs/uploadvideobutton.png'
-        auto.tapimg(button)
-    def SelectVideoSite(self):
-        auto = self.auto
-        video_button_img = 'imgs/videobutton.png'
-        auto.tapimg(video_button_img)
     def PressNext(self):
         auto = self.auto
         diaryButton = 'imgs/yourdiary.png'
